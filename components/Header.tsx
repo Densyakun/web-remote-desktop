@@ -16,7 +16,7 @@ export default function Header() {
               <a>Home</a>
             </Link>
           </li>
-          {user?.isLoggedIn === true && (
+          {user?.isLoggedIn === true && process.env.LOGIN_PASSWORD && (
             <>
               <li>
                 {/* In this case, we're fine with linking with a regular a in case of no JavaScript */}
