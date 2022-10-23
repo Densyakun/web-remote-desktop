@@ -2,6 +2,7 @@ const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
 const { Server } = require("socket.io")
+const hmr = require('node-hmr')
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = 'localhost'
@@ -23,7 +24,13 @@ app.prepare().then(() => {
     }
   })
 
-  require('./signalServer')(new Server(server))
+  let io
+  hmr(() => {
+    if (io) server.close()
+
+    io = new Server(server)
+    require('./signalServer.js')(io)
+  }, { watchDir: './', watchFilePatterns: ['./signalServer.js'] })
 
   server.listen(port, (err) => {
     if (err) throw err
