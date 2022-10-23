@@ -3,6 +3,7 @@ import Head from 'next/head'
 import React from 'react'
 import Layout from '../components/Layout'
 import LoginForm from '../components/LoginForm'
+import Room from '../components/Room'
 import useUser from '../lib/useUser'
 
 const Home: NextPage = () => {
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
       {user && (
         <>
           {user.isLoggedIn
-            ? <pre>{JSON.stringify(user, null, 2)}</pre>
+            ? <Room />
             : <LoginForm />}
         </>
       )}
