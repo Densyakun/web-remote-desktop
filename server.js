@@ -26,10 +26,17 @@ app.prepare().then(() => {
 
   let io
   hmr(() => {
-    if (io) server.close()
-
-    io = new Server(server)
-    require('./signalServer.js')(io)
+    if (io) {
+      server.close()
+      io = undefined
+    }
+    try {
+      const signalServer = require('./signalServer.js')
+      io = new Server(server)
+      signalServer(io)
+    } catch (err) {
+      console.error('error', err)
+    }
   }, { watchDir: './', watchFilePatterns: ['./signalServer.js'] })
 
   server.listen(port, (err) => {
