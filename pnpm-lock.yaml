@@ -4,7 +4,6 @@ specifiers:
   '@types/node': 18.8.2
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
-  '@types/simple-peer': ^9.11.5
   cross-env: ^7.0.3
   eslint: 8.24.0
   eslint-config-next: 12.3.1
@@ -35,7 +34,6 @@ devDependencies:
   '@types/node': 18.8.2
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
-  '@types/simple-peer': 9.11.5
   eslint: 8.24.0
   eslint-config-next: 12.3.1_ypn2ylkkyfa5i233caldtndbqa
   typescript: 4.8.4
@@ -379,12 +377,6 @@ packages:
       '@types/mime': 3.0.1
       '@types/node': 18.8.2
     dev: false
-
-  /@types/simple-peer/9.11.5:
-    resolution: {integrity: sha512-haXgWcAa3Y3Sn+T8lzkE4ErQUpYzhW6Cz2lh00RhQTyWt+xZ3s87wJPztUxlqSdFRqGhe2MQIBd0XsyHP3No4w==}
-    dependencies:
-      '@types/node': 18.8.2
-    dev: true
 
   /@typescript-eslint/parser/5.39.0_ypn2ylkkyfa5i233caldtndbqa:
     resolution: {integrity: sha512-PhxLjrZnHShe431sBAGHaNe6BDdxAASDySgsBCGxcBecVCi8NQWxQZMcizNA4g0pN51bBAn/FUfkWG3SDVcGlA==}
