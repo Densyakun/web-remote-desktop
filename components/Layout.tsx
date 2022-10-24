@@ -1,6 +1,12 @@
 import Header from "./Header";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  IS_PLACE_LOGOUT_BUTTON
+}: {
+  children: React.ReactNode,
+  IS_PLACE_LOGOUT_BUTTON: boolean
+}) {
   return (
     <>
       <style jsx global>{`
@@ -25,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           padding-right: 1rem;
         }
       `}</style>
-      <Header />
+      <Header IS_PLACE_LOGOUT_BUTTON={IS_PLACE_LOGOUT_BUTTON} />
 
       <main>
         <div className="container">{children}</div>

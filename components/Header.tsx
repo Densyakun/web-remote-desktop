@@ -3,7 +3,7 @@ import useUser from "../lib/useUser";
 import { useRouter } from "next/router";
 import fetchJson from "../lib/fetchJson";
 
-export default function Header() {
+export default function Header({ IS_PLACE_LOGOUT_BUTTON }: { IS_PLACE_LOGOUT_BUTTON: boolean }) {
   const { user, mutateUser } = useUser();
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export default function Header() {
               <a>Home</a>
             </Link>
           </li>
-          {user?.isLoggedIn === true && process.env.LOGIN_PASSWORD && (
+          {user?.isLoggedIn === true && IS_PLACE_LOGOUT_BUTTON && (
             <>
               <li>
                 {/* In this case, we're fine with linking with a regular a in case of no JavaScript */}

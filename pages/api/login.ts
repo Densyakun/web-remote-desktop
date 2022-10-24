@@ -12,7 +12,10 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (process.env.LOGIN_PASSWORD && password !== process.env.LOGIN_PASSWORD) throw new Error("Password is incorrect.");
 
-    const user = { isLoggedIn: true } as User;
+    const user: User = {
+      isLoggedIn: true,
+      loginPasswordIsExist: !!process.env.LOGIN_PASSWORD,
+    };
     req.session.user = user;
     await req.session.save();
     res.json(user);
