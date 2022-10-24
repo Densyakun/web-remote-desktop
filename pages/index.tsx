@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const { user } = useUser()
 
   return (
-    <Layout>
+    <Layout IS_PLACE_LOGOUT_BUTTON={user?.loginPasswordIsExist ?? false}>
       <Head>
         <title>Web Remote Desktop</title>
       </Head>
