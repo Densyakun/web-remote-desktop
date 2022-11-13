@@ -2,17 +2,14 @@ const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
 const { Server } = require("socket.io")
-const path = require('path')
-const hmr = require('node-hmr')
-
-var watchDir = './'
-var signalServerFile = './signalServer.js'
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = 'localhost'
 const port = parseInt(process.env.PORT || '3000')
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
+
+var signalServerFile = './signalServer.js'
 
 app.prepare().then(() => {
   const server = createServer(async (req, res) => {
@@ -29,22 +26,35 @@ app.prepare().then(() => {
   })
 
   let io
-  hmr(() => {
-    if (io) {
-      server.close()
-      io = undefined
-    }
+  const fn = () => {
+    const signalServer = require(signalServerFile)
+    io = new Server(server)
+    signalServer(io)
+  }
 
-    try {
-      const signalServer = require(signalServerFile)
-      io = new Server(server)
-      signalServer(io)
-    } catch (e) {
-      console.error(e)
-      const moduleId = path.resolve(watchDir, signalServerFile)
-      require.cache[moduleId] = { id: moduleId }
-    }
-  }, { watchDir: watchDir, watchFilePatterns: [signalServerFile] })
+  // Use hmr only in development mode
+  if (dev) {
+    const path = require('path')
+    const hmr = require('node-hmr')
+
+    var watchDir = './'
+
+    hmr(() => {
+      if (io) {
+        server.close()
+        io = undefined
+      }
+
+      try {
+        fn()
+      } catch (e) {
+        console.error(e)
+        const moduleId = path.resolve(watchDir, signalServerFile)
+        require.cache[moduleId] = { id: moduleId }
+      }
+    }, { watchDir: watchDir, watchFilePatterns: [signalServerFile] })
+  } else
+    fn()
 
   server.listen(port, (err) => {
     if (err) throw err
