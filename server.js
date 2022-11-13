@@ -2,7 +2,11 @@ const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
 const { Server } = require("socket.io")
+const path = require('path')
 const hmr = require('node-hmr')
+
+var watchDir = './'
+var signalServerFile = './signalServer.js'
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = 'localhost'
@@ -30,14 +34,17 @@ app.prepare().then(() => {
       server.close()
       io = undefined
     }
+
     try {
-      const signalServer = require('./signalServer.js')
+      const signalServer = require(signalServerFile)
       io = new Server(server)
       signalServer(io)
-    } catch (err) {
-      console.error('error', err)
+    } catch (e) {
+      console.error(e)
+      const moduleId = path.resolve(watchDir, signalServerFile)
+      require.cache[moduleId] = { id: moduleId }
     }
-  }, { watchDir: './', watchFilePatterns: ['./signalServer.js'] })
+  }, { watchDir: watchDir, watchFilePatterns: [signalServerFile] })
 
   server.listen(port, (err) => {
     if (err) throw err
