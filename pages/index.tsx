@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import Layout from '../components/Layout'
 import LoginForm from '../components/LoginForm'
+import LogoutButton from '../components/LogoutButton'
 import Room from '../components/Room'
 import useUser from '../lib/useUser'
 
@@ -10,19 +10,31 @@ const Home: NextPage = () => {
   const { user } = useUser()
 
   return (
-    <Layout IS_PLACE_LOGOUT_BUTTON={user?.loginPasswordIsExist ?? false}>
+    <>
       <Head>
         <title>Web Remote Desktop</title>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
       </Head>
 
-      {user && (
-        <>
-          {user.isLoggedIn
-            ? <Room />
-            : <LoginForm />}
-        </>
-      )}
-    </Layout>
+      {user?.isLoggedIn === true && (user?.loginPasswordIsExist ?? false) &&
+        <LogoutButton />
+      }
+
+      <div className="container">
+        {
+          user && (
+            <>
+              {user.isLoggedIn
+                ? <Room />
+                : <LoginForm />}
+            </>
+          )
+        }
+      </div>
+    </>
   )
 }
 

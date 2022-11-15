@@ -9,11 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.13",
     "cross-env": "^7.0.3",
     "iron-session": "^6.2.1",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.39.4",
     "simple-signal-client": "^3.0.0",
     "simple-signal-server": "^3.0.0",
     "socket.io": "^4.5.3",
