@@ -46,7 +46,8 @@ app.prepare().then(() => {
 
     hmr(() => {
       if (io) {
-        server.close()
+        io.attach(createServer())
+        io.disconnectSockets()
         io = undefined
       }
 
