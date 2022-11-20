@@ -4,7 +4,7 @@ import type { User } from "../pages/api/user";
 
 export const sessionOptions: IronSessionOptions = {
   password: process.env.SECRET_COOKIE_PASSWORD as string,
-  cookieName: "web-remote-desktop",
+  cookieName: "web_remote_desktop",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
   },
