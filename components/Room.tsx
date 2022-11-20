@@ -7,7 +7,7 @@ export default function Room() {
   return (
     <>
       <video width="250">
-        Sorry, your browser doesn't support embedded videos.
+        Sorry, your browser doesn&apos;t support embedded videos.
       </video>
     </>
   )
