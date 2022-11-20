@@ -1,5 +1,4 @@
-import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "../../lib/session";
+import { withSessionRoute } from "../../lib/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export type User = {
@@ -7,7 +6,7 @@ export type User = {
   loginPasswordIsExist: boolean;
 };
 
-export default withIronSessionApiRoute(userRoute, sessionOptions);
+export default withSessionRoute(userRoute);
 
 async function userRoute(req: NextApiRequest, res: NextApiResponse<User>) {
   if (!process.env.LOGIN_PASSWORD) {

@@ -1,6 +1,8 @@
 const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
+const { ironSession } = require("iron-session/express")
+const { ironOptions } = require("./ironOptions")
 const { Server } = require("socket.io")
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -15,7 +17,6 @@ app.prepare().then(() => {
   const server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true)
-      const { pathname, query } = parsedUrl
 
       await handle(req, res, parsedUrl)
     } catch (err) {
@@ -30,6 +31,10 @@ app.prepare().then(() => {
     const signalServer = require(signalServerFile)
     io = new Server(server)
     signalServer(io)
+
+    const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
+
+    io.use(wrap(ironSession(ironOptions())))
   }
 
   // Use hmr only in development mode

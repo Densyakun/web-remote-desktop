@@ -1,10 +1,9 @@
 import type { User } from "./user";
 
-import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "../../lib/session";
+import { withSessionRoute } from "../../lib/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default withIronSessionApiRoute(loginRoute, sessionOptions);
+export default withSessionRoute(loginRoute);
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   const { password } = await req.body;
