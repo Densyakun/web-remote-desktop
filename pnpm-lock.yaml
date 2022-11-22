@@ -8,6 +8,7 @@ specifiers:
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   cross-env: ^7.0.3
+  error-handled-node-hmr: ^1.0.0
   eslint: 8.24.0
   eslint-config-next: 12.3.1
   iron-session: ^6.2.1
@@ -43,6 +44,7 @@ devDependencies:
   '@types/node': 18.8.2
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
+  error-handled-node-hmr: 1.0.0
   eslint: 8.24.0
   eslint-config-next: 12.3.1_ypn2ylkkyfa5i233caldtndbqa
   node-hmr: 1.3.1
@@ -1269,6 +1271,10 @@ packages:
     dependencies:
       is-arrayish: 0.2.1
     dev: false
+
+  /error-handled-node-hmr/1.0.0:
+    resolution: {integrity: sha512-VGlvj19tys74l+5npeSGqWCKka7swA9krAzoUj4wN11cZww2RQZ74ojxWba1Pr7825r+o0isreOqKBzjWghqIA==}
+    dev: true
 
   /es-abstract/1.20.3:
     resolution: {integrity: sha512-AyrnaKVpMzljIdwjzrj+LxGmj8ik2LckwXacHqrJJ/jxz6dDDBcZ7I7nlHM0FvEW8MfbWJwOd+yT2XzYW49Frw==}

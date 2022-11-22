@@ -27,8 +27,7 @@ app.prepare().then(() => {
   })
 
   let io
-  const fn = () => {
-    const signalServer = require(signalServerFile)
+  const signalServerImported = signalServer => {
     io = new Server(server)
     signalServer(io)
 
@@ -37,30 +36,19 @@ app.prepare().then(() => {
     io.use(wrap(ironSession(ironOptions())))
   }
 
-  // Use hmr only in development mode
   if (dev) {
-    const path = require('path')
     const hmr = require('node-hmr')
+    const ehhmr = require('error-handled-node-hmr')
 
-    var watchDir = './'
-
-    hmr(() => {
+    ehhmr(hmr, signalServerFile, signalServerImported, () => {
       if (io) {
         io.attach(createServer())
         io.disconnectSockets()
         io = undefined
       }
-
-      try {
-        fn()
-      } catch (e) {
-        console.error(e)
-        const moduleId = path.resolve(watchDir, signalServerFile)
-        require.cache[moduleId] = { id: moduleId }
-      }
-    }, { watchDir: watchDir, watchFilePatterns: [signalServerFile] })
+    })
   } else
-    fn()
+    signalServerImported(require(signalServerFile))
 
   server.listen(port, (err) => {
     if (err) throw err
