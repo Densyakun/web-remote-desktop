@@ -13,8 +13,10 @@ const handle = app.getRequestHandler()
 
 var signalServerFile = './signalServer.js'
 
-app.prepare().then(() => {
-  const server = createServer(async (req, res) => {
+let server
+
+function signalServerImported(signalServer) {
+  server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true)
 
@@ -26,32 +28,30 @@ app.prepare().then(() => {
     }
   })
 
-  let io
-  const signalServerImported = signalServer => {
-    io = new Server(server)
-    signalServer(io)
+  const io = new Server(server)
+  signalServer(io)
 
-    const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
+  const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
 
-    io.use(wrap(ironSession(ironOptions())))
-  }
-
-  if (dev) {
-    const hmr = require('node-hmr')
-    const ehhmr = require('error-handled-node-hmr')
-
-    ehhmr(hmr, signalServerFile, signalServerImported, () => {
-      if (io) {
-        io.attach(createServer())
-        io.disconnectSockets()
-        io = undefined
-      }
-    })
-  } else
-    signalServerImported(require(signalServerFile))
+  io.use(wrap(ironSession(ironOptions())))
 
   server.listen(port, (err) => {
     if (err) throw err
     console.log(`> Ready on http://${hostname}:${port}`)
   })
+}
+
+app.prepare().then(() => {
+  if (dev) {
+    const hmr = require('node-hmr')
+    const ehhmr = require('error-handled-node-hmr')
+
+    ehhmr(hmr, signalServerFile, signalServerImported, () => {
+      if (server) {
+        server.close()
+        server = undefined
+      }
+    })
+  } else
+    signalServerImported(require(signalServerFile))
 })
