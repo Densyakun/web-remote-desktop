@@ -7,11 +7,15 @@ module.exports = function setupSignalClient(port, password) {
   const signalClient = new SimpleSignalClient(socket)
 
   signalClient.on('discover', async (id) => {
-    await signalClient.connect(id, undefined, { wrtc: wrtc }).catch(reason => console.error(`robotClient:discover:err ${JSON.stringify(reason)}`))
+    const { peer } = await signalClient.connect(id, undefined, { wrtc: wrtc })
+
+    peer.on('connect', () => {
+      peer.send('how is it going?')
+    })
   })
 
   signalClient.on('request', async (request) => {
-    await request.accept(undefined, { wrtc: wrtc }).catch(reason => console.error(`robotClient:request:err ${JSON.stringify(reason)}`))
+    await request.accept(undefined, { wrtc: wrtc })
   })
 
   signalClient.discover(password)
