@@ -29,7 +29,7 @@ function signalServerImported(signalServer) {
   })
 
   const io = new Server(server)
-  signalServer(io)
+  signalServer(io, port)
 
   const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
 
@@ -51,6 +51,11 @@ app.prepare().then(() => {
         server.close()
         server = undefined
       }
+    }, {
+      watchFilePatterns: [
+        signalServerFile,
+        './robotSignalClient.js'
+      ]
     })
   } else
     signalServerImported(require(signalServerFile))
