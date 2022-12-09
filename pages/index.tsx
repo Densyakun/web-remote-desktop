@@ -9,29 +9,21 @@ import useUser from '../lib/useUser'
 const Home: NextPage = () => {
   const { user } = useUser()
 
-  return (
-    <>
-      <Head>
-        <title>Web Remote Desktop</title>
-      </Head>
+  return <>
+    <Head>
+      <title>Web Remote Desktop</title>
+    </Head>
 
-      {user?.isLoggedIn === true && (user?.loginPasswordIsExist ?? false) &&
-        <LogoutButton />
-      }
+    {user?.isLoggedIn === true && (user?.loginPasswordIsExist ?? false) &&
+      <LogoutButton />
+    }
 
-      <div className="container">
-        {
-          user && (
-            <>
-              {user.isLoggedIn
-                ? <Room />
-                : <LoginForm />}
-            </>
-          )
-        }
-      </div>
-    </>
-  )
+    {user && <>
+      {user.isLoggedIn
+        ? <Room />
+        : <LoginForm />}
+    </>}
+  </>
 }
 
 export default Home
