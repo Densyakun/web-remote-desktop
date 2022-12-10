@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "dist",
+    "noEmit": false
+  },
+  "include": [
+    "server"
+  ],
+  "watchOptions": {
+    "excludeFiles": [
+      "tsconfig.server.json",
+      "tsconfig.server.index.json",
+      "server/signalServer.ts",
+      "server/robotSignalServer.ts"
+    ]
+  }
+}

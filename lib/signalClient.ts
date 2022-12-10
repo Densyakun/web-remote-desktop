@@ -1,7 +1,8 @@
-const SimpleSignalClient = require('simple-signal-client')
-const io = require('socket.io-client')
+import io from 'socket.io-client'
 
-let signalClient
+const SimpleSignalClient = require('simple-signal-client')
+
+let signalClient: any
 
 module.exports = function setupSignalClient() {
   if (signalClient)
@@ -10,14 +11,14 @@ module.exports = function setupSignalClient() {
   const socket = io({ secure: true })
   signalClient = new SimpleSignalClient(socket)
 
-  signalClient.on('discover', async (id) => {
+  signalClient.on('discover', async (id: any) => {
     await signalClient.connect(id)
   })
 
-  signalClient.on('request', async (request) => {
+  signalClient.on('request', async (request: any) => {
     const { peer } = await request.accept()
 
-    peer.on('data', data => {
+    peer.on('data', (data: any) => {
       console.log('got a message: ' + data)
     })
   })

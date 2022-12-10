@@ -5,10 +5,17 @@ import {
   GetServerSidePropsResult,
   NextApiHandler,
 } from "next";
-import { ironOptions as s } from "../ironOptions";
 import type { User } from "../pages/api/user";
 
-export const sessionOptions = s as () => Promise<IronSessionOptions> | IronSessionOptions;
+export const sessionOptions = (): IronSessionOptions => {
+  return {
+    password: process.env.SECRET_COOKIE_PASSWORD as string,
+    cookieName: "web_remote_desktop",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  }
+};
 
 declare module "iron-session" {
   interface IronSessionData {

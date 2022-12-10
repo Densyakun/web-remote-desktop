@@ -1,9 +1,10 @@
-const { createServer } = require('http')
-const { parse } = require('url')
-const next = require('next')
-const { ironSession } = require("iron-session/express")
-const { ironOptions } = require("./ironOptions")
-const { Server } = require("socket.io")
+import * as http from 'http'
+import { parse } from 'url'
+import next from 'next'
+import { ironSession } from "iron-session/express"
+import { sessionOptions } from "../lib/withSession"
+import { Server, Socket } from "socket.io"
+import type SignalServer from "./signalServer"
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = 'localhost'
@@ -13,12 +14,12 @@ const handle = app.getRequestHandler()
 
 var signalServerFile = './signalServer.js'
 
-let server
+let server: http.Server | undefined
 
-function signalServerImported(signalServer) {
-  server = createServer(async (req, res) => {
+function signalServerImported(signalServer: typeof SignalServer) {
+  server = http.createServer(async (req, res) => {
     try {
-      const parsedUrl = parse(req.url, true)
+      const parsedUrl = parse(req.url as string, true)
 
       await handle(req, res, parsedUrl)
     } catch (err) {
@@ -31,11 +32,11 @@ function signalServerImported(signalServer) {
   const io = new Server(server)
   signalServer(io, port)
 
-  const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
+  const wrap = (middleware: any) => (socket: Socket, next: any) => middleware(socket.request, {}, next)
 
-  io.use(wrap(ironSession(ironOptions())))
+  io.use(wrap(ironSession(sessionOptions())))
 
-  server.listen(port, (err) => {
+  server.listen(port, (err?: Error) => {
     if (err) throw err
     console.log(`> Ready on http://${hostname}:${port}`)
   })

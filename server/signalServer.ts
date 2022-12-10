@@ -1,15 +1,16 @@
-const setupSignalClient = require('./robotSignalClient')
+import { Server } from 'socket.io'
+import setupSignalClient from './robotSignalClient'
 
 let robotPeerPassword = ''
 for (var i = 0; i < 6; i++)
   robotPeerPassword += String.fromCodePoint(Math.floor(Math.random() * 0x10FFFF))
 
-let robotPeerRequest
+let robotPeerRequest: any
 
-module.exports = function (io, port) {
+export default function signalServer(io: Server, port: number) {
   const signalServer = require('simple-signal-server')(io)
 
-  signalServer.on('discover', (request) => {
+  signalServer.on('discover', (request: any) => {
     const isRobotPeer = robotPeerPassword && request.discoveryData === robotPeerPassword
     if (!isRobotPeer) {
       if (!request.socket.request.session.user?.isLoggedIn) {
@@ -25,9 +26,11 @@ module.exports = function (io, port) {
     }
   })
 
-  signalServer.on('request', (request) => {
+  signalServer.on('request', (request: any) => {
     request.forward()
   })
 
   setupSignalClient(port, robotPeerPassword)
 }
+
+module.exports = exports.default
