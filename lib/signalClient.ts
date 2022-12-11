@@ -4,7 +4,7 @@ const SimpleSignalClient = require('simple-signal-client')
 
 let signalClient: any
 
-module.exports = function setupSignalClient() {
+export default function setupSignalClient() {
   if (signalClient)
     return
 
